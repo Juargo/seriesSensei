@@ -3,9 +3,11 @@
 from flask import Flask
 from pymongo import MongoClient
 from flask_cors import CORS
+from jikanpy import Jikan
 
 app = Flask(__name__)
 CORS(app)
+jikan = Jikan()
 
 client = MongoClient("mongodb://localhost:27017")
 db = client["seriesSensei"]
@@ -23,5 +25,34 @@ def get_all_series():
                 response[serie] = {
                     "sinopsis": series_object[serie]["sinopsis"],
                     "genres": series_object[serie]["genres"],
+                    "url": series_object[serie]["url"],
                 }
     return response
+
+
+@app.route("/series/extra-info", methods=["POST"])
+def set_extra_info():
+    """Function for set extra data"""
+    print(get_anime_list())
+    # search_result = jikan.search("anime", "berserk")
+
+    for serie in get_anime_list():
+        if serie != "_id":
+            search_result = jikan.search("anime", serie)
+            print(search_result["data"][0]["images"]["jpg"]["image_url"])
+            url = search_result["data"][0]["images"]["jpg"]["image_url"]
+            collection.update_one(
+                {
+                    f"{serie}": {"$exists": True},
+                },
+                {"$set": {f"{serie}.url": url}},
+            )
+    return {}
+
+
+def get_anime_list():
+    """Function return anime list in mongodb"""
+    series = collection.find()
+    for series_object in series:
+        list_of_animes = series_object.keys()
+        return list_of_animes
