@@ -23,9 +23,9 @@ def get_all_series():
         for serie in series_object.keys():
             if serie != "_id":
                 response[serie] = {
-                    "sinopsis": series_object[serie]["sinopsis"],
-                    "genres": series_object[serie]["genres"],
-                    "url": series_object[serie]["url"],
+                    "sinopsis": series_object[serie].get("sinopsis", ""),
+                    "genres": series_object[serie].get("genres", ""),
+                    "url": series_object[serie].get("url", ""),
                 }
     return response
 
