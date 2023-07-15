@@ -4,6 +4,7 @@ from flask import Flask
 from pymongo import MongoClient
 from flask_cors import CORS
 from jikanpy import Jikan
+import time
 
 app = Flask(__name__)
 CORS(app)
@@ -20,6 +21,7 @@ def get_all_series():
     series = collection.find()
     response = {}
     for series_object in series:
+        print(series_object)
         for serie in series_object.keys():
             if serie != "_id":
                 response[serie] = {
@@ -33,11 +35,19 @@ def get_all_series():
 @app.route("/series/extra-info", methods=["POST"])
 def set_extra_info():
     """Function for set extra data"""
-    print(get_anime_list())
-    # search_result = jikan.search("anime", "berserk")
+    series = collection.find()
+    mongo_series = {}
 
-    for serie in get_anime_list():
+    for series_object in series:
+        mongo_series = series_object
+
+    for serie in mongo_series.keys():
         if serie != "_id":
+            if "url" in mongo_series[serie]:
+                continue
+            print(f"search -> {serie}")
+            time.sleep(max(1 / 60, 1 / 3))  # Sleep for the max of 1/60 and 1/3 seconds
+
             search_result = jikan.search("anime", serie)
             print(search_result["data"][0]["images"]["jpg"]["image_url"])
             url = search_result["data"][0]["images"]["jpg"]["image_url"]
@@ -48,11 +58,3 @@ def set_extra_info():
                 {"$set": {f"{serie}.url": url}},
             )
     return {}
-
-
-def get_anime_list():
-    """Function return anime list in mongodb"""
-    series = collection.find()
-    for series_object in series:
-        list_of_animes = series_object.keys()
-        return list_of_animes
