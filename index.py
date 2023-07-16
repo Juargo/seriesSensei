@@ -1,6 +1,6 @@
 """Module principal """
 
-from flask import Flask
+from flask import Flask, request
 from pymongo import MongoClient
 from flask_cors import CORS
 from jikanpy import Jikan
@@ -58,3 +58,11 @@ def set_extra_info():
                 {"$set": {f"{serie}.url": url}},
             )
     return {}
+
+
+@app.route("/series/get-chatgpt-data", methods=["GET"])
+def get_chatgpt_data():
+    """Function for get data from chatgpt"""
+    anime = request.args.get("anime", default=None)
+    print(anime)
+    return "ok"
