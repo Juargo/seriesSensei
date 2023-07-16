@@ -49,6 +49,6 @@ tqdm==4.65.0
 typeguard==3.0.2
 typing_extensions==4.7.1
 urllib3==2.0.3
-Werkzeug==2.3.6
-WTForms==3.0.1
-yarl==1.9.2
+Werkzeug
+WTForms
+yarl
