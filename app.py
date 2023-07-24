@@ -4,6 +4,7 @@ import time
 import json
 import openai
 import certifi
+import os
 
 from flask import Flask, request, jsonify
 from pymongo import MongoClient, errors
@@ -17,13 +18,12 @@ import config
 app = Flask(__name__)
 CORS(app)
 jikan = Jikan()
-openai.api_key = config.API_KEY
-
+openai.api_key = os.getenv("API_KEY")
+# print(os.getenv("API_KEY"))
 
 # client = MongoClient("mongodb://localhost:27017")
-
-uri = config.CONNECTION
-print(uri)
+uri = os.getenv("MONGO_CONNECTION")
+# print(uri)
 
 client = MongoClient(uri, server_api=ServerApi("1"), tlsCAFile=certifi.where())
 

@@ -52,3 +52,4 @@ urllib3==2.0.3
 Werkzeug
 WTForms
 yarl
+gunicorn
