@@ -3,9 +3,12 @@
 import time
 import json
 import openai
+import certifi
 
 from flask import Flask, request, jsonify
 from pymongo import MongoClient, errors
+from pymongo.server_api import ServerApi
+
 from flask_cors import CORS
 from jikanpy import Jikan
 import config
@@ -17,7 +20,13 @@ jikan = Jikan()
 openai.api_key = config.API_KEY
 
 
-client = MongoClient("mongodb://localhost:27017")
+# client = MongoClient("mongodb://localhost:27017")
+
+uri = config.CONNECTION
+print(uri)
+
+client = MongoClient(uri, server_api=ServerApi("1"), tlsCAFile=certifi.where())
+
 db = client["seriesSensei"]
 collection = db["series"]
 
