@@ -68,7 +68,7 @@ def set_extra_info():
                 "url" in mongo_series[serie]
                 and "duration" in mongo_series[serie]
                 and "episodes" in mongo_series[serie]
-                and "genres" in mongo_series[serie]
+                and "genres_real" in mongo_series[serie]
                 and "score" in mongo_series[serie]
                 and "synopsis" in mongo_series[serie]
             ):
@@ -81,7 +81,7 @@ def set_extra_info():
             url = search_result["data"][0]["images"]["jpg"]["image_url"]
             duration = search_result["data"][0]["duration"]
             episodes = search_result["data"][0]["episodes"]
-            genres = search_result["data"][0]["genres"]
+            genres_real = search_result["data"][0]["genres"]
             score = search_result["data"][0]["score"]
             synopsis = search_result["data"][0]["synopsis"]
 
@@ -94,7 +94,7 @@ def set_extra_info():
                         f"{serie}.url": url,
                         f"{serie}.duration": duration,
                         f"{serie}.episodes": episodes,
-                        f"{serie}.genres": genres,
+                        f"{serie}.genres_real": genres_real,
                         f"{serie}.score": score,
                         f"{serie}.synopsis": synopsis,
                     }
