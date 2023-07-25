@@ -43,6 +43,11 @@ def get_all_series():
                     "sinopsis": series_object[serie].get("sinopsis", ""),
                     "genres": series_object[serie].get("genres", ""),
                     "url": series_object[serie].get("url", ""),
+                    "genres_real": series_object[serie].get("genres_real", ""),
+                    "duration": series_object[serie].get("duration", ""),
+                    "episodes": series_object[serie].get("episodes", ""),
+                    "score": series_object[serie].get("score", ""),
+                    "synopsis": series_object[serie].get("synopsis", ""),
                 }
     return response
 
