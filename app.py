@@ -48,6 +48,7 @@ def get_all_series():
                     "episodes": series_object[serie].get("episodes", ""),
                     "score": series_object[serie].get("score", ""),
                     "synopsis": series_object[serie].get("synopsis", ""),
+                    "year": series_object[serie].get("year", ""),
                 }
     return response
 
