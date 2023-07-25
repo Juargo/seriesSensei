@@ -50,6 +50,12 @@ def get_all_series():
 @app.route("/series/extra-info", methods=["POST"])
 def set_extra_info():
     """Function for set extra data"""
+
+    # [0]"duration": "23 min per ep",
+    #   "episodes": 101,
+    #    "genres" []
+    #    score
+    #    synopsis
     series = collection.find()
     mongo_series = {}
 
@@ -66,11 +72,26 @@ def set_extra_info():
             search_result = jikan.search("anime", serie)
             print(search_result["data"][0]["images"]["jpg"]["image_url"])
             url = search_result["data"][0]["images"]["jpg"]["image_url"]
+            duration = search_result["data"][0]["duration"]
+            episodes = search_result["data"][0]["episodes"]
+            genres = search_result["data"][0]["genres"]
+            score = search_result["data"][0]["score"]
+            synopsis = search_result["data"][0]["synopsis"]
+
             collection.update_one(
                 {
                     f"{serie}": {"$exists": True},
                 },
-                {"$set": {f"{serie}.url": url}},
+                {
+                    "$set": {
+                        f"{serie}.url": url,
+                        f"{serie}.duration": duration,
+                        f"{serie}.episodes": episodes,
+                        f"{serie}.genres": genres,
+                        f"{serie}.score": score,
+                        f"{serie}.synopsis": synopsis,
+                    }
+                },
             )
     return {}
 
