@@ -118,6 +118,7 @@ def set_all_data_anime():
     genres_real = search_result["data"][0]["genres"]
     score = search_result["data"][0]["score"]
     synopsis = search_result["data"][0]["synopsis"]
+    year = search_result["data"][0]["year"]
 
     # CHATGPT
     prompt = f"""
@@ -159,6 +160,7 @@ def set_all_data_anime():
         "score": score,
         "synopsis": synopsis,
         "genres": response_json,
+        "year": year,
     }
     if doc is None:
         new_doc = {serie: data}
@@ -178,6 +180,7 @@ def set_all_data_anime():
                     f"{serie}.score": score,
                     f"{serie}.synopsis": synopsis,
                     f"{serie}.genres": response_json,
+                    f"{serie}.year": year,
                 }
             },
         )
