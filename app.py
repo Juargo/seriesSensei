@@ -64,7 +64,14 @@ def set_extra_info():
 
     for serie in mongo_series.keys():
         if serie != "_id":
-            if "url" in mongo_series[serie]:
+            if (
+                "url" in mongo_series[serie]
+                and "duration" in mongo_series[serie]
+                and "episodes" in mongo_series[serie]
+                and "genres" in mongo_series[serie]
+                and "score" in mongo_series[serie]
+                and "synopsis" in mongo_series[serie]
+            ):
                 continue
             print(f"search -> {serie}")
             time.sleep(max(1 / 60, 1 / 3))  # Sleep for the max of 1/60 and 1/3 seconds
