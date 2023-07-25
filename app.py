@@ -55,12 +55,6 @@ def get_all_series():
 @app.route("/series/extra-info", methods=["POST"])
 def set_extra_info():
     """Function for set extra data"""
-
-    # [0]"duration": "23 min per ep",
-    #   "episodes": 101,
-    #    "genres" []
-    #    score
-    #    synopsis
     series = collection.find()
     mongo_series = {}
 
@@ -108,6 +102,89 @@ def set_extra_info():
     return {}
 
 
+@app.route("/series/set-all", methods=["POST"])
+def set_all_data_anime():
+    """Function for set extra data"""
+    serie = request.args.get("serie", default=None)
+    print(f"serie: {serie}")
+
+    doc = collection.find_one({serie: {"$exists": True}})
+
+    # JIKAN DATA
+    search_result = jikan.search("anime", serie)
+    url = search_result["data"][0]["images"]["jpg"]["image_url"]
+    duration = search_result["data"][0]["duration"]
+    episodes = search_result["data"][0]["episodes"]
+    genres_real = search_result["data"][0]["genres"]
+    score = search_result["data"][0]["score"]
+    synopsis = search_result["data"][0]["synopsis"]
+
+    # CHATGPT
+    prompt = f"""
+    Eres un experto crítico de anime. Conociendo el "Análisis de la historia y los personajes" y una "sinopsis" del anime de {anime}.
+
+    Ten en cuenta la siguiente lista de generos de anime que te muestro entre triple comilla.
+    \"\"\"
+    {config.GENRES}
+    \"\"\"
+
+    usando los resultados que obtuviste de "Análisis de la historia y los personajes" y una "sinopsis"  Proporciona una descomposición de los géneros (lista de generos) del anime  {anime} y asigna porcentajes para cada género en función de su relevancia.
+    Debes presentar todos los generos de la "lista de generos".
+
+    Como respuesta debes entregar un JSON que cumpla con el siguiente formato que te muestro dentro de los triple comilla:
+
+    \"\"\"
+    {config.FORMAT}
+    \"\"\"
+
+    retorna solamente un objeto vacío si es que vas a responder algo genérico
+    """
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=1000,
+    )
+
+    print(response.choices[0].message["content"])
+    print(response.usage)
+
+    response_content = response.choices[0].message["content"]
+    response_json = json.loads(response_content)  # Convierte la cadena a un objeto JSON
+
+    data = {
+        "url": url,
+        "duration": duration,
+        "episodes": episodes,
+        "genres_real": genres_real,
+        "score": score,
+        "synopsis": synopsis,
+        "genres": response_json,
+    }
+    if doc is None:
+        new_doc = {serie: data}
+        # Insertar el nuevo documento en la colección
+        collection.insert_one(new_doc)
+    else:
+        collection.update_one(
+            {
+                f"{serie}": {"$exists": True},
+            },
+            {
+                "$set": {
+                    f"{serie}.url": url,
+                    f"{serie}.duration": duration,
+                    f"{serie}.episodes": episodes,
+                    f"{serie}.genres_real": genres_real,
+                    f"{serie}.score": score,
+                    f"{serie}.synopsis": synopsis,
+                    f"{serie}.genres": response_json,
+                }
+            },
+        )
+
+    return {}
+
+
 @app.route("/series/get-chatgpt-data", methods=["GET"])
 def get_chatgpt_data():
     """Function for get data from chatgpt"""
@@ -135,6 +212,8 @@ def get_chatgpt_data():
     \"\"\"
     {config.FORMAT}
     \"\"\"
+
+    retorna solamente un objeto vacío si es que vas a responder algo genérico
     """
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
