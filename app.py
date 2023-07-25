@@ -121,14 +121,14 @@ def set_all_data_anime():
 
     # CHATGPT
     prompt = f"""
-    Eres un experto crítico de anime. Conociendo el "Análisis de la historia y los personajes" y una "sinopsis" del anime de {anime}.
+    Eres un experto crítico de anime. Conociendo el "Análisis de la historia y los personajes" y una "sinopsis" del anime de {serie}.
 
     Ten en cuenta la siguiente lista de generos de anime que te muestro entre triple comilla.
     \"\"\"
     {config.GENRES}
     \"\"\"
 
-    usando los resultados que obtuviste de "Análisis de la historia y los personajes" y una "sinopsis"  Proporciona una descomposición de los géneros (lista de generos) del anime  {anime} y asigna porcentajes para cada género en función de su relevancia.
+    usando los resultados que obtuviste de "Análisis de la historia y los personajes" y una "sinopsis"  Proporciona una descomposición de los géneros (lista de generos) del anime  {serie} y asigna porcentajes para cada género en función de su relevancia.
     Debes presentar todos los generos de la "lista de generos".
 
     Como respuesta debes entregar un JSON que cumpla con el siguiente formato que te muestro dentro de los triple comilla:
