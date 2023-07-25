@@ -102,7 +102,7 @@ def set_extra_info():
     return {}
 
 
-@app.route("/series/set-all", methods=["POST"])
+@app.route("/series/set_all_data_anime", methods=["POST"])
 def set_all_data_anime():
     """Function for set extra data"""
     serie = request.args.get("serie", default=None)
