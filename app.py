@@ -274,3 +274,20 @@ def delete_serie():
         return {"message": f"Serie '{serie}' eliminada."}, 200
     else:
         return {"message": "No se proporcionó el nombre de la serie."}, 400
+
+
+@app.route("/series/get_jikan_anime", methods=["GET"])
+def get_jikan_anime():
+    """Function for set extra data"""
+    serie = request.args.get("serie", default=None)
+    print(f"serie: {serie}")
+
+    # # JIKAN DATA
+    search_result = jikan.search("anime", serie)
+    index = None
+    for i, item in enumerate(search_result["data"]):
+        if item.get("type") == "TV":
+            index = i
+            break
+
+    return search_result.data[index]
