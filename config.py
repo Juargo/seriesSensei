@@ -4,7 +4,7 @@ GENRES = """
   - Action
   - Comedy
   - Horror
-  - Sport
+  - Sports
   - Adventure
   - Drama
   - Mystery
