@@ -111,15 +111,20 @@ def set_all_data_anime():
 
     doc = collection.find_one({serie: {"$exists": True}})
 
-    # JIKAN DATA
+    # # JIKAN DATA
     search_result = jikan.search("anime", serie)
-    url = search_result["data"][0]["images"]["jpg"]["image_url"]
-    duration = search_result["data"][0]["duration"]
-    episodes = search_result["data"][0]["episodes"]
-    genres_real = search_result["data"][0]["genres"]
-    score = search_result["data"][0]["score"]
-    synopsis = search_result["data"][0]["synopsis"]
-    year = search_result["data"][0]["year"]
+    index = None
+    for i, item in enumerate(search_result["data"]):
+        if item.get("type") == "TV":
+            index = i
+            break
+    url = search_result["data"][index]["images"]["jpg"]["image_url"]
+    duration = search_result["data"][index]["duration"]
+    episodes = search_result["data"][index]["episodes"]
+    genres_real = search_result["data"][index]["genres"]
+    score = search_result["data"][index]["score"]
+    synopsis = search_result["data"][index]["synopsis"]
+    year = search_result["data"][index]["year"]
 
     # CHATGPT
     prompt = f"""
