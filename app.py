@@ -270,6 +270,7 @@ def delete_serie():
     )  # Se recibe el nombre de la serie a eliminar como parámetro en la URL
     if serie:
         collection.delete_one({f"{serie}": {"$exists": True}})
+        # collection.update_one({}, {"$unset": {f"{serie}": 1}})
         return {"message": f"Serie '{serie}' eliminada."}, 200
     else:
         return {"message": "No se proporcionó el nombre de la serie."}, 400
