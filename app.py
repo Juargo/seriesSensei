@@ -261,3 +261,15 @@ def get_chatgpt_data():
                 500,
             )
     return jsonify({"message": "Actualización exitosa"}), 200
+
+
+@app.route("/delete-serie", methods=["DELETE"])
+def delete_serie():
+    serie = request.args.get(
+        "serie"
+    )  # Se recibe el nombre de la serie a eliminar como parámetro en la URL
+    if serie:
+        collection.delete_one({f"{serie}": {"$exists": True}})
+        return {"message": f"Serie '{serie}' eliminada."}, 200
+    else:
+        return {"message": "No se proporcionó el nombre de la serie."}, 400
