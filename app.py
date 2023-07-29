@@ -263,7 +263,7 @@ def get_chatgpt_data():
     return jsonify({"message": "Actualización exitosa"}), 200
 
 
-@app.route("/delete-serie", methods=["DELETE"])
+@app.route("/delete-serie", methods=["POST"])
 def delete_serie():
     serie = request.args.get(
         "serie"
