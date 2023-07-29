@@ -290,4 +290,4 @@ def get_jikan_anime():
             index = i
             break
 
-    return search_result.data[index]
+    return search_result["data"][index]
